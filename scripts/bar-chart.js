@@ -136,7 +136,7 @@ function redrowChart(data_1) {
                     return tickValue
                 }
                 else {
-                    return tickValue + " " + choosenBoxValue
+                    return tickValue + " " + supportedCurrenciesTXT[supportedCurrencies.indexOf(choosenBoxValue)]
                 }
             }));
 

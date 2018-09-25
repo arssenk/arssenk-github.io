@@ -93,9 +93,9 @@ function addBackgroundColorToInputForm() {
 
 function updateTotalValuesGraph2(val1, val2) {
     document.getElementById("graph-2-total-" + 1).value =
-        val1 + " " + supportedCurrenciesTXT[supportedCurrencies.indexOf(choosenBoxValue)];;
+        val1 + " " + supportedCurrenciesTXT[supportedCurrencies.indexOf(choosenBoxValue)];
     document.getElementById("graph-2-total-" + 2).value =
-        val2 + " " + supportedCurrenciesTXT[supportedCurrencies.indexOf(choosenBoxValue)];;
+        val2 + " " + supportedCurrenciesTXT[supportedCurrencies.indexOf(choosenBoxValue)];
 }
 
 function getdaysInMonth(year, month) {
