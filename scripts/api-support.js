@@ -78,7 +78,7 @@ function getHistoryData(arr) {
     disableForms(1);
 
     const url = "https://openexchangerates.org/api/";
-    const userKey = "12046b6b63cb4907a5f4614618796747";
+    const userKey = "50390a5304474279b277dfd95509734b";
 
     let getLatestData = fetch(url + "latest.json?app_id=" + userKey).then(resp => resp.json())
         .then(resp => {
