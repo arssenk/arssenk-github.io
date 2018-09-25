@@ -3,7 +3,6 @@
   flex-direction: row;
   justify-content: space-between;
   height: 280px;
-  margin-left: 10px;
 }
 .converter__for-button {
   display: flex;
