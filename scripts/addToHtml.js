@@ -1,12 +1,13 @@
 function addNewCurrency(curr) {
     if (hiddenCurrencies.length !== 0) {
+        let currTxt = hiddenCurrenciesTXT[hiddenCurrencies.indexOf(curr)];
+
         addColorToSupportedColors();
         addInputCurrencyForm(curr);
         addOutputCurrencyForm();
         addPercentageForm();
-        addOptionToBox(curr);
+        addOptionToBox(currTxt);
 
-        let currTxt = hiddenCurrenciesTXT[hiddenCurrencies.indexOf(curr)];
         supportedCurrencies.push(curr);
         supportedCurrenciesTXT.push(currTxt);
 
@@ -83,7 +84,7 @@ function addPercentageForm() {
 }
 function addOptionToBox(curr) {
     let optionVal = document.createElement("OPTION");
-    optionVal.value = curr;
+    optionVal.value = hiddenCurrencies[hiddenCurrenciesTXT.indexOf(curr)];
     optionVal.innerHTML = curr;
     document.getElementById("currency-choose-box-id").append(optionVal);
 }
@@ -116,11 +117,11 @@ function addOptionsToModalWindow() {
         let currencyAddButton = document.createElement("BUTTON");
         currencyAddButton.className = "modal__currency-button";
         let spanTagInButton = document.createElement("SPAN");
-        let spanValue = document.createTextNode(hiddenCurrencies[currCurrencyIndex]);
+        let spanValue = document.createTextNode(hiddenCurrenciesTXT[currCurrencyIndex]);
         spanTagInButton.appendChild(spanValue);
         currencyAddButton.appendChild(spanValue);
         currencyAddButton.onclick = function () {
-            addNewCurrency(this.childNodes[0].data);
+            addNewCurrency(hiddenCurrencies[hiddenCurrenciesTXT.indexOf(this.childNodes[0].data)]);
             this.remove()
         };
 

@@ -48,7 +48,7 @@ function disableSelectBox(notch) {
 
 function updateDropDownValue() {
     chooseBox = document.getElementById("currency-choose-box-id");
-    choosenBoxValue = chooseBox.options[chooseBox.selectedIndex].text;
+    choosenBoxValue = chooseBox.options[chooseBox.selectedIndex].value;
 }
 
 function updateCurrencyInTitle() {
@@ -59,12 +59,27 @@ function updateCurrencyInTitle() {
 // Updates all forms, graphs, button and checkbox
 function updateStatus() {
     updateDropDownValue();
+
+    rebaseDate(currencyHistory);
+
     updateCurrencyInTitle();
     addToPercentage();
     addTo();
     addBackgroundColorToInputForm();
+
     startRenderingGraph1(currencyHistory);
     redrowChart(currencyHistory);
+}
+
+//Sets new base to currencies
+function rebaseDate(data) {
+    for (let i = 0; i < data.length; i++) {
+        let tmpBaseValue = data[i][choosenBoxValue];
+        for (let currencyItemIndex = 0; currencyItemIndex < supportedCurrenciesAll.length; currencyItemIndex++) {
+            data[i][supportedCurrenciesAll[currencyItemIndex]] = data[i][supportedCurrenciesAll[currencyItemIndex]] / tmpBaseValue
+        }
+    }
+    return 1;
 }
 
 function runAtStart() {
@@ -132,7 +147,7 @@ function scaleNumber(number) {
     if (numberToWorkWith.length > 6) {
         return d3.format(".3s")(number)
     }
-    else{
+    else {
         return addSpacesToNumber(numberToWorkWith)
     }
 }

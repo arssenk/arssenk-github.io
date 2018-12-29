@@ -1,16 +1,16 @@
 .bar-chart {
   display: flex;
   flex-direction: column-reverse;
-  margin-top: 27px;
-  height: 230px;
+  margin-top: 5px;
+  height: 240px;
 }
 .bar-chart__totals-container {
-  width: 232px;
+  width: 245px;
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
-  margin-left: 64px;
+  margin-left: 57px;
 }
 .bar-chart__axis-bottom line,
 .bar-chart__axis-left line {

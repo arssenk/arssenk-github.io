@@ -2,24 +2,22 @@ function redrowChart(data_1) {
     let data = createDeepCopy(data_1);
     let dataFourMonth = [];
     quarterMonthCopy = quarterMonth.slice();
-    let namesXAxisBar = ["сьогодні", "через рік"];
+    let namesXAxisBar = ["сегодня", "через год"];
 
 
     // Current year chosen month
     for (let i = 0; i < data.length; i++) {
         if (!isCurrentYear(data[i].date)) {
             dataFourMonth.push(data[i])
-            // quarterMonthCopy = quarterMonthCopy.filter(item => item !== parseInt(data[i].date.split("-")[1]))
         }
     }
 
-
     d3.select(".bar-chart__svg").remove();
     d3.select(".bar-chart").append("svg").attr("class", "bar-chart__svg")
-        .attr("width", 300).attr("height", 200);
+        .attr("width", 300).attr("height", 225);
 
     let barChart = d3.select(".bar-chart__svg"),
-        marginBar = {top: 21, right: 3, bottom: 26, left: 65},
+        marginBar = {top: 21, right: 21, bottom: 25, left: 53},
         widthBar = +barChart.attr("width") - marginBar.left - marginBar.right,
         heightBar = +barChart.attr("height") - marginBar.top - marginBar.bottom,
         gBar = barChart.append("g").attr("transform", "translate(" + marginBar.left + "," + marginBar.top + ")");
@@ -35,18 +33,19 @@ function redrowChart(data_1) {
         .rangeRound([heightBar, 0]);
 
 
-    let colors = d3.scaleOrdinal(d3.schemeCategory10);
+    let colors = d3.scaleOrdinal(d3.schemeCategory20);
 
     //update values
     for (let i = 0; i < dataFourMonth.length; i++) {
+
         //Total value of bar
         let totalValue = 0;
         for (let currencyIndex = 0; currencyIndex < supportedCurrencies.length; currencyIndex++) {
 
+            //Convert to chosen currency
             dataFourMonth[i][supportedCurrencies[currencyIndex]] =
                 +convertToChosenCurrencyWithDate(valueCurrencyArray[currencyIndex],
                     supportedCurrencies[currencyIndex], choosenBoxValue, dataFourMonth[i].date);
-
             totalValue += dataFourMonth[i][supportedCurrencies[currencyIndex]];
 
             if (document.getElementById("percentage_checkbox").checked) {
@@ -55,12 +54,12 @@ function redrowChart(data_1) {
                 //Calculate complex percentage
                 dataFourMonth[i][supportedCurrencies[currencyIndex] + "_percentage"] =
                     convertComplexPercentage(valueCurrencyArray[currencyIndex],
-                        valuePercentageArray[currencyIndex], i+1);
+                        valuePercentageArray[currencyIndex], i + 1);
 
                 //Convert to chosen currency
                 dataFourMonth[i][supportedCurrencies[currencyIndex] + "_percentage"] =
                     +convertToChosenCurrencyWithDate(dataFourMonth[i][supportedCurrencies[currencyIndex] + "_percentage"],
-                        supportedCurrencies[currencyIndex], choosenBoxValue, dataFourMonth[i].date)
+                        supportedCurrencies[currencyIndex], choosenBoxValue, dataFourMonth[i].date);
 
                 totalValue += dataFourMonth[i][supportedCurrencies[currencyIndex] + "_percentage"]
             }
@@ -81,12 +80,13 @@ function redrowChart(data_1) {
     else {
         keys = supportedCurrencies;
     }
+    // console.log(keys    )
     xBar.domain(dataFourMonth.map(function (d) {
         return d.date;
     }));
     yBar.domain([0, d3.max(dataFourMonth, function (d) {
-        return d.total ;
-    })]);
+        return d.total * 1.6;
+    })]).nice();
 
     colors.domain(keys);
 
@@ -98,7 +98,7 @@ function redrowChart(data_1) {
             if (supportedCurrencies.includes(d.key)) {
                 return colorsForCurr[supportedCurrencies.indexOf(d.key)]
             }
-            else if(d.key.split("_").length > 1 && d.key.split("_")[1] === "percentage"){
+            else if (d.key.split("_").length > 1 && d.key.split("_")[1] === "percentage") {
                 return colorsForPercentage[supportedCurrencies.indexOf(d.key.split("_")[0])]
             }
             else {
@@ -129,9 +129,9 @@ function redrowChart(data_1) {
 
     gBar.append("g")
         .attr("class", "bar-chart__axis-left")
-        .call(d3.axisLeft(yBar).ticks(5)
+        .call(d3.axisLeft(yBar).ticks(4)
             .tickFormat(function (d) {
-                let tickValue = d3.format(".3s")(d);
+                let tickValue = d3.format(".0s")(d);
                 if (this.parentNode.nextSibling) {
                     return tickValue
                 }
@@ -140,8 +140,8 @@ function redrowChart(data_1) {
                 }
             }));
 
-    updateTotalValuesGraph2(scaleNumber(Math.round(totalConverted)),
-        scaleNumber(Math.round(dataFourMonth[dataFourMonth.length - 1]["total"]))
+    updateTotalValuesGraph2(Math.round(totalConverted),
+        Math.round(dataFourMonth[dataFourMonth.length - 1]["total"])
     );
 
     //Remove zero tick

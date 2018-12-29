@@ -29,25 +29,25 @@
     <section class="converter-header">
         <div class="converter-header__container">
             <h1 class="converter-header__title">
-                Прогноз збереження
+                Прогноз сбережений
             </h1>
             <div class="converter-header__container">
                 <label for="percentage_checkbox"></label>
                 <input type="checkbox" id="percentage_checkbox" name="subscribe" value="newsletter"
                        onchange="addToPercentage()">
                 <p>
-                    Ставки
+                    С вкладами
                 </p>
             </div>
         </div>
         <section class="converter-header__currency-choose">
-            <p>Валюта</p>
+            <p>Моя валюта</p>
             <label for="currency-choose-box-id"></label>
             <select name="currency-choose-box" id="currency-choose-box-id" onchange="updateStatus()">
-                <option value="USD" selected>USD</option>
-                <option value="EUR">EUR</option>
-                <option value="GBP">GBP</option>
-                <option value="CAD">CAD</option>
+                <option value="RUB" selected>₽</option>
+                <option value="USD">$</option>
+                <option value="EUR">€</option>
+                <option value="CNY">¥</option>
             </select>
         </section>
     </section>
@@ -57,35 +57,35 @@
                 <section class="convert-table__input-fields">
 
                     <h1 class="convert-table__title">
-                        Збереження
+                        Сбережения
                     </h1>
 
                     <section class="convert-table__input-section">
-                        <img src="./img/dollar-currency-sign.svg" alt="USD" class="convert-table__currency-img">
+                        <img src="./img/RUB.svg" alt="RUB" class="convert-table__currency-img">
                         <label for="currency_1"></label>
                         <input type="text" name="txt" class="convert-table__input-exchange"
-                               id="currency_1" value=10000
+                               id="currency_1" value=250000
                                onchange="addTo()">
                     </section>
 
                     <section class="convert-table__input-section">
-                        <img src="./img/euro-currency-symbol.svg" alt="EUR" class="convert-table__currency-img">
+                        <img src="./img/USD.svg" alt="USD" class="convert-table__currency-img">
                         <label for="currency_2"></label>
                         <input type="text" name="txt" class="convert-table__input-exchange"
-                               id="currency_2" value=8000
+                               id="currency_2" value=10000
                                onchange="addTo()">
                     </section>
 
                     <section class="convert-table__input-section">
-                        <img src="./img/pound-symbol-variant.svg" alt="GBP" class="convert-table__currency-img">
+                        <img src="./img/EUR.svg" alt="EUR" class="convert-table__currency-img">
                         <label for="currency_3"></label>
                         <input type="text" name="txt" class="convert-table__input-exchange"
-                               id="currency_3" value=7000
+                               id="currency_3" value=8000
                                onchange="addTo()">
                     </section>
 
                     <section class="convert-table__input-section">
-                        <img src="./img/CAD.svg" alt="CAD" class="convert-table__currency-img">
+                        <img src="./img/CNY.svg" alt="CNY" class="convert-table__currency-img">
                         <label for="currency_4"></label>
                         <input type="text" name="txt" class="convert-table__input-exchange"
                                id="currency_4" value=6000
@@ -94,7 +94,7 @@
 
                 <section class="convert-table__converted-currency">
                     <h1 class="convert-table__title" id="output-current-currency">
-                        В моїй валюті,
+                        В моей валюте,
                     </h1>
                     <output class="convert-table__output-exchange" id="currency_converted_1"></output>
                     <output class="convert-table__output-exchange" id="currency_converted_2"></output>
@@ -105,7 +105,7 @@
                 <section class="convert-table__input-percentage">
 
                     <h1 class="convert-table__title">
-                        Ставки вкладів, %
+                        Ставки вкладов, %
                     </h1>
 
                     <label for="input_percentage_1"></label>
@@ -133,8 +133,8 @@
         <div class="converter__container-for-graphs">
 
             <section class="line-chart">
-                <p>Історія і прогноз курсів</p>
-                <p>Перетягніть, щоб змінити прогноз</p>
+                <p>История и прогноз курсов</p>
+                <p>Перетащите точку, чтобы изменить прогноз</p>
                 <svg class="line-chart__svg" width="300" height="200"></svg>
                 <script src="scripts/line-chart.js"></script>
             </section>
@@ -167,12 +167,12 @@
 </div>
 <script>
 
-    let supportedCurrencies = ["USD", "EUR", "GBP", "CAD"];
-    let supportedCurrenciesTXT = ["$", "€", "₤", "C$"];
+    let supportedCurrencies = ["RUB", "USD", "EUR", "CNY"];
+    let supportedCurrenciesTXT = ["₽", "$", "€", "¥"];
 
     //Write new currency here when you want to add one
-    let hiddenCurrencies = ["PLN", "SGD"];
-    let hiddenCurrenciesTXT = ["zł", "S$"];
+    let hiddenCurrencies = ["GBP", "CAD", "PLN", "SGD"];
+    let hiddenCurrenciesTXT = ["₤", "C$", "zł", "S$"];
 
     const supportedCurrenciesAll = supportedCurrencies.concat(hiddenCurrencies);
 
@@ -180,14 +180,14 @@
     let quarterMonth = [];
     let currentDate = 0;
 
-    const baseCurrency = "USD";
+    const baseCurrency = "RUB";
     let lastCurrencies = [];
     let currencyHistory = [];
     //    let currencyNew = [];
     let totalConverted = 0;
 
-    const colorsForCurr = ["#0066cc", "#009933", "#ff9900", "#ff0000", "#b35900", "#862d59"];
-    const colorsForPercentage = ["#66a3e0", "#66c285", "#ffb84d", "#ff4d4d", "#ff9933", "#d98cb3"];
+    const colorsForCurr = ["#0066cc", "#009933", "#ff9900", "#ff0000", "#b35900", "#862d59", "#F1EE19", "#D611CC"];
+    const colorsForPercentage = ["#66a3e0", "#66c285", "#ffb84d", "#ff4d4d", "#ff9933", "#d98cb3", "#FEFA01", "#FE01F0"];
 
     let valueCurrencyArray = [];
     let valuePercentageArray = [];

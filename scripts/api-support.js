@@ -56,8 +56,10 @@ function generateYearBack(currDate, url, userKey) {
 }
 
 function processDataApi(data) {
-    let neededCurrencies = supportedCurrenciesAll.filter(item => item !== choosenBoxValue);
+    // let neededCurrencies = supportedCurrenciesAll.filter(item => item !== choosenBoxValue);
+    let neededCurrencies = supportedCurrenciesAll;
     let tmp = [];
+    // tmp[data["base"]] = 1;
 
     for (let currentCurrency = 0; currentCurrency < neededCurrencies.length; currentCurrency++) {
 
@@ -105,6 +107,8 @@ function getHistoryData(arr) {
         .then(resp => resp.map(r => {
                 if (r.date === currentDate) {
                     lastCurrencies = Object.assign({}, r);
+                    // lastCurrencies.length = supportedCurrenciesAll.length
+                    rebaseDate([lastCurrencies])
                 }
                 arr.push(r);
                 return r;
@@ -114,8 +118,13 @@ function getHistoryData(arr) {
             let tmpDataItem;
             let datesToAssign = createDatesAYearAhead();
             for (let dataIndex = 0; dataIndex <= 3; dataIndex++) {
-                tmpDataItem = Object.assign({}, resp[dataIndex])
+                tmpDataItem = Object.assign({}, lastCurrencies);
                 tmpDataItem.date = datesToAssign[dataIndex];
+                let currCurrencies = supportedCurrencies.filter(item => item !== choosenBoxValue);
+                for (let currencyIndex = 0; currencyIndex < currCurrencies.length; currencyIndex++) {
+                    tmpDataItem[currCurrencies[currencyIndex]] -= tmpDataItem[currCurrencies[currencyIndex]]
+                        * (dataIndex) / 40
+                }
                 arr.push(tmpDataItem)
             }
         })
@@ -123,7 +132,7 @@ function getHistoryData(arr) {
                 // addTo();
                 // startRenderingGraph1(arr);
                 // redrowChart(arr);
-                updateStatus()
+                updateStatus();
                 disableForms(0);
             }
         )

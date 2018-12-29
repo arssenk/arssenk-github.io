@@ -17,12 +17,10 @@ function addTo() {
             valueCurrencyArray[i - 1] = +document.getElementById("currency_" + i).value;
             let valueToWrite = convertToChosenCurrency(valueCurrencyArray[i - 1],
                 supportedCurrencies[i - 1], choosenBoxValue);
-
             if (valueToWrite > 1000) {
                 valueToWrite = Math.round(valueToWrite)
             }
-            tmpTotal += valueToWrite;
-
+            tmpTotal += +valueToWrite;
             document.getElementById("currency_converted_" + i).value =
                 scaleNumber(valueToWrite);
 
@@ -50,7 +48,8 @@ function addToPercentage() {
             valuePercentageArray[i - 1] = +document.getElementById("input_percentage_" + i).value;
         }
         else {
-            alert("Percentage " + i + " needs to be in range 0-100")
+            alert("Percentage " + i + " needs to be in range 0-100");
+            document.getElementById("input_percentage_" + i).value = 0
         }
     }
     redrowChart(currencyHistory)

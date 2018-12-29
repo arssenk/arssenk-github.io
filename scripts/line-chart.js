@@ -5,7 +5,7 @@ function startRenderingGraph1(data_1) {
     let dataStatic = [];
     let dataMoving = [lastCurrencies];
     let interestedMonthCopy = interestedMonth.slice();
-    let namesXAxis = ["рік тому", "сьогодні", "рік після"];
+    let namesXAxis = ["год назад", "сегодня", "через год"];
 
     for (let i = 0; i < dataToSplit.length; i++) {
 
@@ -18,12 +18,12 @@ function startRenderingGraph1(data_1) {
     }
 
     d3.select(".line-chart__svg").remove();
-    d3.select(".line-chart").append("svg").attr("class", "line-chart__svg").attr("width", 310)
-        .attr("height", 200);
+    d3.select(".line-chart").append("svg").attr("class", "line-chart__svg").attr("width", 270)
+        .attr("height", 236);
 
 
     let svgLineChart = d3.select(".line-chart__svg"),
-        marginLineChart = {top: 20, right: 50, bottom: 30, left: 40},
+        marginLineChart = {top: 5, right: 20, bottom: 60, left: 30},
         widthLineChart = svgLineChart.attr("width") - marginLineChart.left - marginLineChart.right,
         heightLineChart = svgLineChart.attr("height") - marginLineChart.top - marginLineChart.bottom,
         gLineChart = svgLineChart.append("g").attr("transform", "translate(" + marginLineChart.left + ","
@@ -35,8 +35,8 @@ function startRenderingGraph1(data_1) {
         .range([0, widthLineChart])
         .paddingInner(0.35);
 
-    y = d3.scaleLinear().range([heightLineChart, 0]);
-    colorsLineChart = d3.scaleOrdinal(d3.schemeCategory10);
+    y = d3.scaleLinear().range([heightLineChart, 0])
+    colorsLineChart = d3.scaleOrdinal(d3.schemeCategory20);
 
     function make_y_gridlines() {
         return d3.axisLeft(y)
@@ -44,8 +44,7 @@ function startRenderingGraph1(data_1) {
     }
 
     function make_x_gridlines() {
-        return d3.axisBottom(x)
-            .ticks(4)
+        return d3.axisBottom(xLabels.paddingInner(0).paddingOuter(0.4))
     }
 
 
@@ -81,7 +80,6 @@ function startRenderingGraph1(data_1) {
         };
     });
 
-
     let currenciesStatic = supportedCurrencies.filter(item => {
         return item !== choosenBoxValue && supportedCurrencies.includes(item)
     }).map(function (currentCurrencyToAssign) {
@@ -112,8 +110,6 @@ function startRenderingGraph1(data_1) {
             })
         };
     });
-
-
     x.domain(d3.extent(data, function (d) {
         return timeParser(d.date);
     }));
@@ -127,10 +123,10 @@ function startRenderingGraph1(data_1) {
         }),
         d3.max(currencies, function (c) {
             return d3.max(c.values, function (d) {
-                return d.currency + 0.1;
+                return d.currency + d.currency / 8;
             });
         })
-    ]);
+    ]).nice();
 
     // Create focus group items and drug functions for each currency
     for (let i = 0; i < supportedCurrencies.length; i++) {
@@ -154,7 +150,7 @@ function startRenderingGraph1(data_1) {
             });
 
         draggedFunctions[i] = function (d) {
-            if (d3.event.y < heightLineChart -2 && d3.event.y > 2 && y.invert(d3.event.y) > 0) {
+            if (d3.event.y < heightLineChart - 2 && d3.event.y > 2 && y.invert(d3.event.y) > 0) {
 
                 d.currency = y.invert(d3.event.y);
                 d3.select(this)
@@ -167,19 +163,19 @@ function startRenderingGraph1(data_1) {
 
             }
             // else {
-                // if (y.invert(d3.event.y) > 0 && d3.event.y > heightLineChart - 2){
-                //
-                //     d.currency = y.invert(d3.event.y);
-                //     updateCurrency(d);
-                //     redrowChart(currencyHistory);
-                //     startRenderingGraph1(currencyHistory)
-                // }
-                // else if ((y.invert(d3.event.y) <= y.domain()[1]) && d3.event.y < 5&& d3.event.y > 0) {
-                //     d.currency = y.invert(d3.event.y);
-                //     updateCurrency(d);
-                //     redrowChart(currencyHistory);
-                //     startRenderingGraph1(currencyHistory)
-                // }
+            // if (y.invert(d3.event.y) > 0 && d3.event.y > heightLineChart - 2){
+            //
+            //     d.currency = y.invert(d3.event.y);
+            //     updateCurrency(d);
+            //     redrowChart(currencyHistory);
+            //     startRenderingGraph1(currencyHistory)
+            // }
+            // else if ((y.invert(d3.event.y) <= y.domain()[1]) && d3.event.y < 5&& d3.event.y > 0) {
+            //     d.currency = y.invert(d3.event.y);
+            //     updateCurrency(d);
+            //     redrowChart(currencyHistory);
+            //     startRenderingGraph1(currencyHistory)
+            // }
             // }
         }
         ;
@@ -198,14 +194,9 @@ function startRenderingGraph1(data_1) {
 
     gLineChart.append("g")
         .attr("class", "line-chart__axis-bottom")
-        .attr("transform", "translate(0," + heightLineChart + ")")
+        .attr("transform", "translate(0," + (heightLineChart - 1) + ")")
         .call(d3.axisBottom(xLabels))
-        .attr("font-size", "12px");
-
-
-    gLineChart.append("g")
-        .attr("class", "line-chart__axis-left")
-    // .call(d3.axisLeft(y).ticks(4))
+        .attr("font-size", "11px");
 
 
     let currencyLines = gLineChart.selectAll(".currencyLines")
@@ -226,6 +217,7 @@ function startRenderingGraph1(data_1) {
                 return colorsForCurr[supportedCurrencies.indexOf(d.currentCurrency)]
             }
             else {
+                console.log("asdfasdfasdf")
                 return colorsLineChart(d.currentCurrency);
             }
         });
@@ -286,12 +278,12 @@ function startRenderingGraph1(data_1) {
     //Add grid
     svgLineChart.append("g")
         .attr("class", "line-chart__grid")
-        .attr("transform", "translate(" + marginLineChart.left + "," + (heightLineChart + marginLineChart.top) + ")")
+        .attr("transform", "translate(" + marginLineChart.left + "," + (heightLineChart + marginLineChart.top ) + ")")
         .call(make_x_gridlines()
             .tickSize(-heightLineChart)
             .tickFormat("")
         );
-
+    //
     svgLineChart.append("g")
         .attr("class", "line-chart__grid")
         .attr("transform", "translate(" + marginLineChart.left + "," + marginLineChart.top + ")")
@@ -299,12 +291,13 @@ function startRenderingGraph1(data_1) {
             .tickSize(-widthLineChart)
         );
 
-    //Remove zero tick
+    // //Remove zero tick
     svgLineChart.selectAll(".tick")
         .filter(function (d) {
             return d === 0;
         })
         .remove();
+
 
     function dragstarted(d) {
         d3.select(this).raise().classed('active', true);
@@ -320,13 +313,10 @@ function startRenderingGraph1(data_1) {
         for (let i = 0; i < currencyHistory.length; i++) {
             if (JSON.stringify(timeParser(currencyHistory[i].date)) === JSON.stringify(currencyItem.date)) {
                 currencyHistory[i][currencyItem.currencyName] = 1 / currencyItem.currency;
-                return 1;
             }
         }
-        return 0;
+        return 1;
     }
-
-
 }
 ;
 
