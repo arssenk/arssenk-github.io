@@ -1,17 +1,28 @@
-function redrowChart(data_1) {
+import {
+    convertComplexPercentage,
+    convertToChosenCurrencyWithDate,
+    createDeepCopy,
+    isCurrentYear,
+    updateTotalValuesGraph2
+} from "./tmp_1";
+
+import {COLORS_FOR_CURR, colorsForPercentage, SUPPORTED_CURRENCIES, SUPPORTED_CURRENCIES_TXT} from "./config";
+import {currentDate, valueCurrencyArray, valuePercentageArray} from "./index";
+
+export function renderBarChart(data_1) {
+    console.log("in graph 1");
     let data = createDeepCopy(data_1);
     let dataFourMonth = [];
-    quarterMonthCopy = quarterMonth.slice();
+    // quarterMonthCopy = quarterMonth.slice();
     let namesXAxisBar = ["сегодня", "через год"];
 
 
     // Current year chosen month
     for (let i = 0; i < data.length; i++) {
-        if (!isCurrentYear(data[i].date)) {
+        if (!isCurrentYear(data[i].date, currentDate)) {
             dataFourMonth.push(data[i])
         }
     }
-
     d3.select(".bar-chart__svg").remove();
     d3.select(".bar-chart").append("svg").attr("class", "bar-chart__svg")
         .attr("width", 300).attr("height", 225);
@@ -32,7 +43,6 @@ function redrowChart(data_1) {
     let yBar = d3.scaleLinear()
         .rangeRound([heightBar, 0]);
 
-
     let colors = d3.scaleOrdinal(d3.schemeCategory20);
 
     //update values
@@ -40,30 +50,31 @@ function redrowChart(data_1) {
 
         //Total value of bar
         let totalValue = 0;
-        for (let currencyIndex = 0; currencyIndex < supportedCurrencies.length; currencyIndex++) {
+        for (let currencyIndex = 0; currencyIndex < SUPPORTED_CURRENCIES.length; currencyIndex++) {
 
             //Convert to chosen currency
-            dataFourMonth[i][supportedCurrencies[currencyIndex]] =
+            dataFourMonth[i][SUPPORTED_CURRENCIES[currencyIndex]] =
                 +convertToChosenCurrencyWithDate(valueCurrencyArray[currencyIndex],
-                    supportedCurrencies[currencyIndex], choosenBoxValue, dataFourMonth[i].date);
-            totalValue += dataFourMonth[i][supportedCurrencies[currencyIndex]];
+                    SUPPORTED_CURRENCIES[currencyIndex], window.choosenBoxValue, dataFourMonth[i].date);
+
+            totalValue += dataFourMonth[i][SUPPORTED_CURRENCIES[currencyIndex]];
 
             if (document.getElementById("percentage_checkbox").checked) {
 
-
                 //Calculate complex percentage
-                dataFourMonth[i][supportedCurrencies[currencyIndex] + "_percentage"] =
+                dataFourMonth[i][SUPPORTED_CURRENCIES[currencyIndex] + "_percentage"] =
                     convertComplexPercentage(valueCurrencyArray[currencyIndex],
                         valuePercentageArray[currencyIndex], i + 1);
 
                 //Convert to chosen currency
-                dataFourMonth[i][supportedCurrencies[currencyIndex] + "_percentage"] =
-                    +convertToChosenCurrencyWithDate(dataFourMonth[i][supportedCurrencies[currencyIndex] + "_percentage"],
-                        supportedCurrencies[currencyIndex], choosenBoxValue, dataFourMonth[i].date);
+                dataFourMonth[i][SUPPORTED_CURRENCIES[currencyIndex] + "_percentage"] =
+                    +convertToChosenCurrencyWithDate(dataFourMonth[i][SUPPORTED_CURRENCIES[currencyIndex] + "_percentage"],
+                        SUPPORTED_CURRENCIES[currencyIndex], window.choosenBoxValue, dataFourMonth[i].date);
 
-                totalValue += dataFourMonth[i][supportedCurrencies[currencyIndex] + "_percentage"]
+                totalValue += dataFourMonth[i][SUPPORTED_CURRENCIES[currencyIndex] + "_percentage"]
             }
         }
+
         dataFourMonth[i].total = totalValue;
     }
 
@@ -72,15 +83,14 @@ function redrowChart(data_1) {
     if (document.getElementById("percentage_checkbox").checked) {
 
         //Create "EUR", "EUR_percentage", ... keys
-        for (let i = 0; i < supportedCurrencies.length; i++) {
-            keys.push(supportedCurrencies[i]);
-            keys.push(supportedCurrencies[i] + "_percentage")
+        for (let i = 0; i < SUPPORTED_CURRENCIES.length; i++) {
+            keys.push(SUPPORTED_CURRENCIES[i]);
+            keys.push(SUPPORTED_CURRENCIES[i] + "_percentage")
         }
     }
     else {
-        keys = supportedCurrencies;
+        keys = SUPPORTED_CURRENCIES;
     }
-    // console.log(keys    )
     xBar.domain(dataFourMonth.map(function (d) {
         return d.date;
     }));
@@ -95,11 +105,11 @@ function redrowChart(data_1) {
         .data(d3.stack().keys(keys)(dataFourMonth))
         .enter().append("g")
         .attr("fill", function (d) {
-            if (supportedCurrencies.includes(d.key)) {
-                return colorsForCurr[supportedCurrencies.indexOf(d.key)]
+            if (SUPPORTED_CURRENCIES.includes(d.key)) {
+                return COLORS_FOR_CURR[SUPPORTED_CURRENCIES.indexOf(d.key)]
             }
             else if (d.key.split("_").length > 1 && d.key.split("_")[1] === "percentage") {
-                return colorsForPercentage[supportedCurrencies.indexOf(d.key.split("_")[0])]
+                return colorsForPercentage[SUPPORTED_CURRENCIES.indexOf(d.key.split("_")[0])]
             }
             else {
                 return colors(d.key);
@@ -136,11 +146,11 @@ function redrowChart(data_1) {
                     return tickValue
                 }
                 else {
-                    return tickValue + " " + supportedCurrenciesTXT[supportedCurrencies.indexOf(choosenBoxValue)]
+                    return tickValue + " " + SUPPORTED_CURRENCIES_TXT[SUPPORTED_CURRENCIES.indexOf(window.choosenBoxValue)]
                 }
             }));
 
-    updateTotalValuesGraph2(Math.round(totalConverted),
+    updateTotalValuesGraph2(Math.round(dataFourMonth[0]["total"]),
         Math.round(dataFourMonth[dataFourMonth.length - 1]["total"])
     );
 
