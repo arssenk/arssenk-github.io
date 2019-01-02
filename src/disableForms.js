@@ -23,7 +23,7 @@ function disableSelectBox(notch) {
     }
 }
 
-function disableButton(notch) {
+export function disableButton(notch) {
     document.getElementsByClassName("convert-table__add-currency-button")[0].disabled = !!notch;
     if (notch) {
         document.getElementsByClassName("convert-table__add-currency-button")[0].style["background-color"] = "grey";
@@ -38,5 +38,6 @@ export function disableForms(disableNotch) {
     disableInputCurrency(disableNotch);
     disableButton(disableNotch);
     disableCheckBox(disableNotch);
-    disableSelectBox(disableNotch)
+    disableSelectBox(disableNotch);
+    disableInputPercentage(disableNotch);
 }

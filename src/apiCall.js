@@ -3,13 +3,14 @@
  */
 import {disableForms} from "./disableForms";
 import {
-    addPredictionPoints, convertToYYMMDDFormat, generateYearBack, processDataApi,
+    addPredictionPoints, generateYearBack, processDataApi,
     rebaseDate
 } from "./apiProcessing";
+import {convertToYYMMDDFormat} from "./converters";
 
 
 
-export function a() {
+export function getCurrencyData() {
     disableForms(1);
     const url = "https://openexchangerates.org/api/";
     const userKey = "50390a5304474279b277dfd95509734b";

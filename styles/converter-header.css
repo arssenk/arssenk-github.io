@@ -28,7 +28,8 @@
   font-size: 12px;
 }
 .converter-header__container > input {
-  margin-top: 5px;
+  margin-top: 22px;
+  height: 15px;
 }
 .converter-header__currency-choose {
   display: flex;

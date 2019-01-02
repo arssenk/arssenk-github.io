@@ -1,62 +1,58 @@
 import {rebaseDate} from "./apiProcessing";
 import {COLORS_FOR_CURR, SUPPORTED_CURRENCIES, SUPPORTED_CURRENCIES_TXT} from "./config";
-import {lastCurrencies} from "./index";
 import * as d3 from "d3";
 import {renderBarChart} from "./graphBar";
 import {
     addCurrencySelect,
     addInputCurrencyForm,
     addOptionToSelectCurrency,
+    addOutputCurrencyForm,
     addPercentageCheckbox,
-    addPercentageForm,
-    outputForm
+    addPercentageForm
 } from "./addToHTMLtmp";
-import {startRenderingLineChart} from "./lineChart";
+import {renderLineChart} from "./lineChart";
+import {getInputValues} from "./getters";
+import {convertToChosenCurrency} from "./converters";
 
 
 export function addInputForms() {
     addCurrencySelect();
-    addPercentageCheckbox()
+    addPercentageCheckbox();
 
     let currCurrency;
     for (let currInd = 0; currInd < SUPPORTED_CURRENCIES.length; currInd++) {
         currCurrency = SUPPORTED_CURRENCIES[currInd];
         addInputCurrencyForm(currCurrency);
-        addOptionToSelectCurrency(currCurrency)
+        addOptionToSelectCurrency(currCurrency);
         addPercentageForm(currCurrency);
-        outputForm(currCurrency)
+        addOutputCurrencyForm(currCurrency)
     }
 }
 // Updates all forms, graphs, button and checkbox
-export function updateStatus(valueCurrencyArray, valuePercentageArray, totalConverted) {
-    console.log("choser", window.choosenBoxValue);
+export function updateStatus() {
     updateDropDownValue();
-    console.log("after cghosen ", window.choosenBoxValue);
 
     rebaseDate(window.currencyHistory);
-    console.log("after cghosen 1", window.choosenBoxValue);
 
     updateCurrencyInTitle(window.choosenBoxValue);
-    console.log("after cghosen 2", window.choosenBoxValue);
 
-    addToPercentage(valuePercentageArray);
-    console.log("after cghosen 3", window.choosenBoxValue);
+    inputHandler();
 
-    addTo(valueCurrencyArray, totalConverted);
-    console.log("after cghosen 4", window.choosenBoxValue);
+    percentageInputHandler();
+
 
     addBackgroundColorToInputForm();
-    console.log("hos", window.currencyHistory);
-    startRenderingLineChart(window.currencyHistory);
+
+    renderLineChart();
 
     renderBarChart(window.currencyHistory);
 
 }
 
-export function addUpdateFunctionChooseBox(valueCurrencyArray, valuePercentageArray, totalConverted) {
+export function addUpdateFunctionChooseBox() {
 
     document.getElementById('currency-choose-box-id').onchange = function () {
-        updateStatus(valueCurrencyArray, valuePercentageArray, totalConverted);
+        updateStatus();
     };
 }
 
@@ -72,62 +68,70 @@ function updateCurrencyInTitle() {
         + SUPPORTED_CURRENCIES_TXT[SUPPORTED_CURRENCIES.indexOf(window.choosenBoxValue)];
 }
 
-
-export function addTo(valueCurrencyArray, totalConverted) {
-    let tmpTotal = 0;
+function parseCurrencyInput() {
     for (let i = 1; i < SUPPORTED_CURRENCIES.length + 1; i++) {
+
         // Parse spaces
         document.getElementById("currency_" + i).value =
             document.getElementById("currency_" + i).value.split(" ").join("");
+
 
         //Parse empty string
         if (document.getElementById("currency_" + i).value === "") {
             document.getElementById("currency_" + i).value = 0;
         }
 
-        //Convert to chosen curr and write to output
-        if (isNumber(document.getElementById("currency_" + i).value)) {
-
-            valueCurrencyArray[i - 1] = +document.getElementById("currency_" + i).value;
-
-            let valueToWrite = convertToChosenCurrency(valueCurrencyArray[i - 1],
-                SUPPORTED_CURRENCIES[i - 1], window.choosenBoxValue);
-
-            if (valueToWrite > 1000) {
-                valueToWrite = Math.round(valueToWrite)
-            }
-
-            tmpTotal += +valueToWrite;
-
-            document.getElementById("currency_converted_" + i).value =
-                scaleNumber(valueToWrite);
-
-            //Format number
-            document.getElementById("currency_" + i).value = addSpacesToNumber(document.getElementById("currency_" + i).value);
-        }
-        else {
-            alert("Currency " + i + " needs to be a number")
+        if (!isNumber(document.getElementById("currency_" + i).value)) {
+            alert("Currency " + SUPPORTED_CURRENCIES[i - 1] + " needs to be getCurrencyData number");
+            document.getElementById("currency_" + i).value = 0;
+            return 0;
         }
     }
-    totalConverted = tmpTotal;
-    renderBarChart(window.currencyHistory)
-
+    return 1;
 }
 
-export function addToPercentage(valuePercentageArray) {
+function parsePercentageInput() {
+    for (let i = 1; i < SUPPORTED_CURRENCIES.length + 1; i++) {
+        if (!isNumberForPercentage(document.getElementById("input_percentage_" + i).value)) {
+            alert("Percentage " + i + " needs to be in range 0-100");
+            document.getElementById("input_percentage_" + i).value = 0;
+            return 0
+        }
+    }
+    return 1;
+}
+
+
+function writeToOutputForms() {
+    let inputCurrencyValues = getInputValues();
+    for (let i = 1; i < SUPPORTED_CURRENCIES.length + 1; i++) {
+        let valueToWrite = +convertToChosenCurrency(inputCurrencyValues[i - 1],
+            SUPPORTED_CURRENCIES[i - 1], window.choosenBoxValue);
+
+        if (valueToWrite > 1000) {
+            valueToWrite = Math.round(valueToWrite)
+        }
+        document.getElementById("currency_converted_" + i).value =
+            scaleNumber(valueToWrite);
+    }
+}
+
+export function inputHandler() {
+    parseCurrencyInput();
+    writeToOutputForms();
+
+    renderBarChart(window.currencyHistory)
+}
+
+
+// TODO first two lines another function
+export function percentageInputHandler() {
+
     for (let i = 0; i < document.getElementsByClassName("convert-table__input-percentage-form").length; i++) {
         document.getElementsByClassName("convert-table__input-percentage-form")[i].disabled = !document.getElementById("percentage_checkbox").checked;
     }
 
-    for (let i = 1; i < SUPPORTED_CURRENCIES.length + 1; i++) {
-        if (isNumberForPercentage(document.getElementById("input_percentage_" + i).value)) {
-            valuePercentageArray[i - 1] = +document.getElementById("input_percentage_" + i).value;
-        }
-        else {
-            alert("Percentage " + i + " needs to be in range 0-100");
-            document.getElementById("input_percentage_" + i).value = 0
-        }
-    }
+    parsePercentageInput();
     renderBarChart(window.currencyHistory)
 }
 
@@ -162,12 +166,19 @@ function addSpacesToNumber(number) {
 export function isNumberForPercentage(n) {
     return !isNaN(parseFloat(n)) && isFinite(n) && n >= 0 && n <= 100;
 }
-//
-// function addBackgroundColorToInputForm() {
-//     let items = document.getElementsByClassName("convert-table__currency-img");
-//     for (let i = 0; i < items.length; i++) {
-//         let currEll = items[i];
-//         currEll.style["background-color"] = COLORS_FOR_CURR[i];
-//         // currEll.style["border-radius"] = "7px";
-//     }
-// }
+
+
+//Check for current year
+export function isCurrentYear(date, currentDate) {
+    let thisMonth = parseInt(date.split("-")[1]);
+    let thisYear = parseInt(date.split("-")[0]);
+    let thisDay = parseInt(date.split("-")[2]);
+    let currYear = parseInt(currentDate.split("-")[0]);
+    let currMonth = parseInt(currentDate.split("-")[1]);
+    let currDay = parseInt(currentDate.split("-")[2]);
+
+    if ((currYear > thisYear) || ((currYear === thisYear) && (currMonth > thisMonth))) {
+        return true
+    }
+    else return (currYear === thisYear) && (currMonth === thisMonth) && (currDay >= thisDay);
+}

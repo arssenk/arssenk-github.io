@@ -1,6 +1,6 @@
 import {SUPPORTED_CURRENCIES, SUPPORTED_CURRENCIES_ALL} from "./config";
-import {choosenBoxValue} from "./index";
-import {isCurrentYear} from "./tmp_1";
+import {convertToYYMMDDFormat} from "./converters";
+import {isCurrentYear} from "./helperFuncTmp";
 
 //Generate api requests for year back
 export function generateYearBack(currDate, url, userKey) {
@@ -57,7 +57,7 @@ export function processDataApi(data) {
     return tmp;
 }
 
-//Setting a new currency base
+//Setting getCurrencyData new currency base
 export function rebaseDate(data) {
     for (let i = 0; i < data.length; i++) {
         let tmpBaseValue = data[i][window.choosenBoxValue];
@@ -97,10 +97,6 @@ export function getdaysInMonth(year, month) {
     return new Date(year, month, 0).getDate();
 }
 
-export function convertToYYMMDDFormat(year, month, day) {
-    return year + "-" +
-        ('0' + month).slice(-2) + "-" + ('0' + day).slice(-2);
-}
 
 export function addPredictionPoints(currencyHistory, currentDate, lastCurrencies) {
     let tmpDataItem;

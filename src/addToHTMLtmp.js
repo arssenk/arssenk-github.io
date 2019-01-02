@@ -1,11 +1,13 @@
-import {choosenBoxValue, totalConverted, valueCurrencyArray, valuePercentageArray} from "./index";
-import {addTo, addToPercentage, updateStatus} from "./helperFuncTmp";
+import {totalConverted} from "./index";
+import {inputHandler, percentageInputHandler, updateStatus} from "./helperFuncTmp";
 import {
     DEFAULT_CURRENCIES_PERCENTAGE,
     DEFAULT_CURRENCIES_VALUES, HIDDEN_CURRENCIES, HIDDEN_CURRENCIES_TXT,
     SUPPORTED_CURRENCIES_ALL,
     SUPPORTED_CURRENCIES_ALL_TXT, SUPPORTED_CURRENCIES, SUPPORTED_CURRENCIES_TXT, COLORS_FOR_CURR
 } from "./config";
+import {addNewCurrency} from "./currency-modal-window";
+
 
 export function addInputCurrencyForm(curr) {
     let sectionForOutputFrom = document.createElement("SECTION");
@@ -24,7 +26,7 @@ export function addInputCurrencyForm(curr) {
     inputForm.value = DEFAULT_CURRENCIES_VALUES[SUPPORTED_CURRENCIES_ALL.indexOf(curr)];
 
     inputForm.onchange = function () {
-        addTo(valueCurrencyArray, totalConverted, choosenBoxValue);
+        inputHandler();
     };
 
     sectionForOutputFrom.appendChild(imageForOutputFrom);
@@ -35,11 +37,11 @@ export function addInputCurrencyForm(curr) {
 export function addPercentageCheckbox() {
 
     let percentageCheckbox = document.createElement("INPUT");
-    percentageCheckbox.id = "percentage_checkbox"
+    percentageCheckbox.id = "percentage_checkbox";
     percentageCheckbox.type = "checkbox";
 
     percentageCheckbox.onchange = function () {
-        updateStatus(valueCurrencyArray, valuePercentageArray, totalConverted);
+        percentageInputHandler();
     };
 
     document.getElementsByClassName("converter-header__container")[1].prepend(percentageCheckbox);
@@ -55,7 +57,7 @@ export function addCurrencySelect() {
     currencySelect.id = "currency-choose-box-id";
 
     currencySelect.onchange = function () {
-        updateStatus(choosenBoxValue, valueCurrencyArray, valuePercentageArray, totalConverted);
+        updateStatus();
     };
 
     document.getElementsByClassName("converter-header__currency-choose")[0].append(currencySelectLabel);
@@ -72,6 +74,7 @@ export function addOptionToSelectCurrency(curr) {
 
     document.getElementsByClassName("currency-choose-box")[0].append(optionSelect);
 }
+
 export function addPercentageForm(curr) {
 
     let inputForm = document.createElement("INPUT");
@@ -81,14 +84,14 @@ export function addPercentageForm(curr) {
     inputForm.setAttribute("value", DEFAULT_CURRENCIES_PERCENTAGE[SUPPORTED_CURRENCIES_ALL.indexOf(curr)]);
 
     inputForm.onchange = function () {
-        addToPercentage(valuePercentageArray);
+        percentageInputHandler();
     };
     document.getElementsByClassName("convert-table__input-percentage")[0].append(inputForm);
 
 }
 
 
-export function outputForm(curr) {
+export function addOutputCurrencyForm(curr) {
 
     let outputForm = document.createElement("OUTPUT");
     outputForm.className = "convert-table__output-exchange";

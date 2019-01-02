@@ -1,16 +1,11 @@
-import {
-    convertComplexPercentage,
-    convertToChosenCurrencyWithDate,
-    createDeepCopy,
-    isCurrentYear,
-    updateTotalValuesGraph2
-} from "./tmp_1";
-
 import {COLORS_FOR_CURR, colorsForPercentage, SUPPORTED_CURRENCIES, SUPPORTED_CURRENCIES_TXT} from "./config";
-import {currentDate, valueCurrencyArray, valuePercentageArray} from "./index";
+import {currentDate} from "./index";
+import * as d3 from "d3";
+import {getInputValues, getPercentageValues} from "./getters";
+import {convertComplexPercentage, convertToChosenCurrencyWithDate} from "./converters";
+import {isCurrentYear} from "./helperFuncTmp";
 
 export function renderBarChart(data_1) {
-    console.log("in graph 1");
     let data = createDeepCopy(data_1);
     let dataFourMonth = [];
     // quarterMonthCopy = quarterMonth.slice();
@@ -45,6 +40,8 @@ export function renderBarChart(data_1) {
 
     let colors = d3.scaleOrdinal(d3.schemeCategory20);
 
+    let valueCurrencyArray = getInputValues();
+    let valuePercentageArray = getPercentageValues();
     //update values
     for (let i = 0; i < dataFourMonth.length; i++) {
 
@@ -160,4 +157,20 @@ export function renderBarChart(data_1) {
             return d === 0;
         })
         .remove();
+}
+
+function updateTotalValuesGraph2(val1, val2) {
+    document.getElementById("graph-2-total-" + 1).value =
+        val1 + " " + SUPPORTED_CURRENCIES_TXT[SUPPORTED_CURRENCIES.indexOf(window.choosenBoxValue)];
+
+    document.getElementById("graph-2-total-" + 2).value =
+        val2 + " " + SUPPORTED_CURRENCIES_TXT[SUPPORTED_CURRENCIES.indexOf(window.choosenBoxValue)];
+}
+
+function createDeepCopy(o) {
+    let r = [];
+    for (let i = 0; i < o.length; i++) {
+        r.push(Object.assign({}, o[i]))
+    }
+    return Object.values(r)
 }

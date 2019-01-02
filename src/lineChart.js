@@ -1,18 +1,19 @@
 import {currentDate, lastCurrencies} from "./index";
 import {COLORS_FOR_CURR, SUPPORTED_CURRENCIES} from "./config";
-import * as d3 from "./d3.min";
-import {convertToChosenForGraph, isCurrentYear} from "./tmp_1";
 import {renderBarChart} from "./graphBar";
+import * as d3 from "d3";
+import {convertToChosenForGraph} from "./converters";
+import {isCurrentYear} from "./helperFuncTmp";
 
 
-export function startRenderingLineChart() {
-    console.log("in line chart", window.choosenBoxValue, window.currencyHistory, lastCurrencies)
+export function renderLineChart() {
     let data = Object.values(Object.assign({}, window.currencyHistory));
     let dataToSplit = Object.values(Object.assign({}, window.currencyHistory));
 
     let dataStatic = [];
     let dataMoving = [lastCurrencies];
     let namesXAxis = ["год назад", "сегодня", "через год"];
+
 
     for (let i = 0; i < dataToSplit.length; i++) {
 
@@ -24,7 +25,10 @@ export function startRenderingLineChart() {
         }
     }
 
+    //Removing old graph
     d3.select(".line-chart__svg").remove();
+
+    //Appending new graph
     d3.select(".line-chart").append("svg").attr("class", "line-chart__svg").attr("width", 270)
         .attr("height", 236);
 
@@ -175,13 +179,13 @@ export function startRenderingLineChart() {
             //     d.currency = y.invert(d3.event.y);
             //     updateCurrency(d);
             //     renderBarChart(currencyHistory);
-            //     startRenderingLineChart(currencyHistory)
+            //     renderLineChart(currencyHistory)
             // }
             // else if ((y.invert(d3.event.y) <= y.domain()[1]) && d3.event.y < 5&& d3.event.y > 0) {
             //     d.currency = y.invert(d3.event.y);
             //     updateCurrency(d);
             //     renderBarChart(currencyHistory);
-            //     startRenderingLineChart(currencyHistory)
+            //     renderLineChart(currencyHistory)
             // }
             // }
         }
@@ -236,7 +240,7 @@ export function startRenderingLineChart() {
             .attr("class", "line-chart__moving-lines")
             .attr("fill", "none")
             .style("stroke", function () {
-                if (SUPPORTED_CURRENCIES.indexOf(choosenBoxValue) <= i) {
+                if (SUPPORTED_CURRENCIES.indexOf(window.choosenBoxValue) <= i) {
                     return COLORS_FOR_CURR[i + 1]
                 }
                 else {
@@ -303,7 +307,6 @@ export function startRenderingLineChart() {
             return d === 0;
         })
         .remove();
-
 
     function dragstarted(d) {
         d3.select(this).raise().classed('active', true);
