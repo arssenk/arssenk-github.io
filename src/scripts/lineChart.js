@@ -1,4 +1,4 @@
-import {currentDate, lastCurrencies} from "./index";
+import {CURRENT_DATE, LAST_CURRENCIES} from "./index";
 import {COLORS_FOR_CURR} from "./config";
 import {renderBarChart} from "./graphBar";
 import * as d3 from "d3";
@@ -12,13 +12,13 @@ export function renderLineChart() {
     let dataToSplit = Object.values(Object.assign({}, window.currencyHistory));
 
     let dataStatic = [];
-    let dataMoving = [lastCurrencies];
+    let dataMoving = [LAST_CURRENCIES];
     let namesXAxis = ["год назад", "сегодня", "через год"];
 
 
     for (let i = 0; i < dataToSplit.length; i++) {
 
-        if (isCurrentYear(dataToSplit[i].date, currentDate)) {
+        if (isCurrentYear(dataToSplit[i].date, CURRENT_DATE)) {
             dataStatic.push(dataToSplit[i]);
         }
         else {
@@ -170,7 +170,7 @@ export function renderLineChart() {
             //     console.log("d a", d);
             //
             //     updateCurrency(d);
-            //     renderBarChart(window.currencyHistory);
+            //     renderBarChart(window.CURRENCY_HISTORY);
             //     // renderLineChart();
             //     y.domain([y.domain()[0], 1.2 * d.currency])
             //
@@ -194,14 +194,14 @@ export function renderLineChart() {
             //
             //     d.currency = y.invert(d3.event.y);
             //     updateCurrency(d);
-            //     renderBarChart(currencyHistory);
-            //     renderLineChart(currencyHistory)
+            //     renderBarChart(CURRENCY_HISTORY);
+            //     renderLineChart(CURRENCY_HISTORY)
             // }
             // else if ((y.invert(d3.event.y) <= y.domain()[1]) && d3.event.y < 5&& d3.event.y > 0) {
             //     d.currency = y.invert(d3.event.y);
             //     updateCurrency(d);
-            //     renderBarChart(currencyHistory);
-            //     renderLineChart(currencyHistory)
+            //     renderBarChart(CURRENCY_HISTORY);
+            //     renderLineChart(CURRENCY_HISTORY)
             // }
             // }
         }

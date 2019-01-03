@@ -8,26 +8,20 @@ import {getCurrencyData} from "./apiCall";
 import {runAtStartModalWindow} from "./currency-modal-window";
 
 
-export let totalConverted = 0;
+export let CURRENT_DATE;
 
-export let currentDate;
-
-export let currencyHistory;
-export let lastCurrencies = [];
+export let CURRENCY_HISTORY;
+export let LAST_CURRENCIES = [];
 
 
 addInputForms();
 
-// // TODO window,choset to getter
-// let chooseBox = document.getElementById("currency-choose-box-id");
-// window.choosenBoxValue = chooseBox.options[chooseBox.selectedIndex].value;
-
 let currencyData = getCurrencyData();
 
 currencyData.then(resp => {
-    lastCurrencies = resp[resp.length - 1];
-    currentDate = lastCurrencies.date;
-    addPredictionPoints(resp, currentDate, lastCurrencies);
+    LAST_CURRENCIES = resp[resp.length - 1];
+    CURRENT_DATE = LAST_CURRENCIES.date;
+    addPredictionPoints(resp, CURRENT_DATE, LAST_CURRENCIES);
     window.currencyHistory = resp;
     disableForms(0);
     addUpdateFunctionChooseBox();

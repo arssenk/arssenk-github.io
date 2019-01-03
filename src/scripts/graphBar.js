@@ -1,5 +1,5 @@
 import {COLORS_FOR_CURR, colorsForPercentage} from "./config";
-import {currentDate} from "./index";
+import {CURRENT_DATE} from "./index";
 import * as d3 from "d3";
 import {getChosenCurrency, getInputValues, getPercentageValues} from "./getters";
 import {convertComplexPercentage, convertToChosenCurrencyWithDate} from "./converters";
@@ -14,7 +14,7 @@ export function renderBarChart(data_1) {
 
     // Current year chosen month
     for (let i = 0; i < data.length; i++) {
-        if (!isCurrentYear(data[i].date, currentDate)) {
+        if (!isCurrentYear(data[i].date, CURRENT_DATE)) {
             dataFourMonth.push(data[i])
         }
     }
@@ -92,8 +92,8 @@ export function renderBarChart(data_1) {
         return d.date;
     }));
     yBar.domain([0, d3.max(dataFourMonth, function (d) {
-        return d.total * 1.6;
-    })]).nice();
+        return d.total * 1.5;
+    })]);
 
     colors.domain(keys);
 
@@ -138,7 +138,7 @@ export function renderBarChart(data_1) {
         .attr("class", "bar-chart__axis-left")
         .call(d3.axisLeft(yBar).ticks(4)
             .tickFormat(function (d) {
-                let tickValue = d3.format(".0s")(d);
+                let tickValue = d3.format(".2s")(d);
                 if (this.parentNode.nextSibling) {
                     return tickValue
                 }

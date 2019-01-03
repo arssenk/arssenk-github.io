@@ -9,7 +9,7 @@ import {
 } from "./config";
 import {disableButton} from "./disableForms";
 import {updateStatus} from "./helperFuncTmp";
-import {totalConverted, valueCurrencyArray, valuePercentageArray} from "./index";
+import {totalConverted} from "./index";
 
 export function runAtStartModalWindow() {
     let modal = document.getElementById('currency-modal');

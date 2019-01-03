@@ -1,4 +1,4 @@
-import {lastCurrencies} from "./index";
+import {LAST_CURRENCIES} from "./index";
 import {getCurrencyObjectByDate} from "./getters";
 
 export function convertToChosenCurrencyWithDate(number, convertFrom, convertTo, date) {
@@ -13,7 +13,7 @@ export function convertToChosenCurrencyWithDate(number, convertFrom, convertTo, 
 }
 
 export function convertComplexPercentage(number, percentage, n) {
-    return number * Math.pow(1 + percentage / 100, n) - number;
+    return number * Math.pow(1 + percentage / 400, n) - number;
 }
 
 export function convertToChosenForGraph(d, convertFrom, convertTo) {
@@ -21,7 +21,7 @@ export function convertToChosenForGraph(d, convertFrom, convertTo) {
 }
 
 export function convertToChosenCurrency(number, convertFrom, convertTo) {
-    return (number * lastCurrencies[convertTo] / lastCurrencies[convertFrom]).toFixed(2);
+    return (number * LAST_CURRENCIES[convertTo] / LAST_CURRENCIES[convertFrom]).toFixed(2);
 }
 
 export function convertToYYMMDDFormat(year, month, day) {
