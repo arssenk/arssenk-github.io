@@ -53,13 +53,6 @@ export function addUpdateFunctionChooseBox() {
     };
 }
 
-//
-// function updateDropDownValue() {
-//     let chooseBox = document.getElementById("currency-choose-box-id");
-//     window.choosenBoxValue = chooseBox.options[chooseBox.selectedIndex].value;
-//     return chooseBox.options[chooseBox.selectedIndex].value;
-// }
-
 function updateCurrencyInTitle() {
     document.getElementById('output-current-currency').innerHTML = "В моїй валюті, "
         + SUPPORTED_CURRENCIES_TXT[SUPPORTED_CURRENCIES.indexOf(getChosenCurrency())];
@@ -73,7 +66,7 @@ function parseCurrencyInput() {
 
 
         //Parse empty string
-        if (document.getElementById("currency_" + i).value === "") {
+        if (document.getElementById("currency_" + i).value === "" ||document.getElementById("currency_" + i).value[0] ==="0" ) {
             document.getElementById("currency_" + i).value = 0;
         }
 
