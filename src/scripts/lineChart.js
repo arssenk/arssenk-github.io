@@ -163,6 +163,18 @@ export function renderLineChart() {
             });
 
         draggedFunctions[i] = function (d) {
+            // console.log("in", d, y.invert(d3.event.y), d3.event.y)
+
+            // if (d3.event.y === 0 || (d3.event.y === heightLineChart && y.invert(d3.event.y) > 0)) {
+            //     d.currency = y.invert(d3.event.y);
+            //     console.log("d a", d);
+            //
+            //     updateCurrency(d);
+            //     renderBarChart(window.currencyHistory);
+            //     // renderLineChart();
+            //     y.domain([y.domain()[0], 1.2 * d.currency])
+            //
+            //     console.log("in 1", y.domain(), y.invert(d3.event.y), d3.event.y)
             if (d3.event.y < heightLineChart - 2 && d3.event.y > 2 && y.invert(d3.event.y) > 0) {
 
                 d.currency = y.invert(d3.event.y);
@@ -173,7 +185,10 @@ export function renderLineChart() {
 
                 updateCurrency(d);
                 renderBarChart(window.currencyHistory);
+                // renderLineChart();
+
             }
+
             // else {
             // if (y.invert(d3.event.y) > 0 && d3.event.y > heightLineChart - 2){
             //
@@ -274,7 +289,7 @@ export function renderLineChart() {
                 }
             });
 
-        //Filter first circle so it doesn't drag
+        //Filter first circle so it doesn't drag and doesn't show up
         focusCurrencies[i].selectAll('circle').filter(function (item, ind) {
             if (ind !== 0) {
                 return this

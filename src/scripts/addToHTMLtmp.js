@@ -14,7 +14,7 @@ export function addInputCurrencyForm(curr) {
 
     let imageForOutputFrom = document.createElement("img");
     imageForOutputFrom.className = "convert-table__currency-img";
-    imageForOutputFrom.src = "./img/" + curr + ".svg";
+    imageForOutputFrom.src = "./src/img/" + curr + ".svg";
     imageForOutputFrom.alt = curr;
 
 
