@@ -4,7 +4,7 @@ import {
     addPercentageForm
 } from "./addToHTMLtmp";
 import {
-    HIDDEN_CURRENCIES_TXT, HIDDEN_CURRENCIES, SUPPORTED_CURRENCIES, SUPPORTED_CURRENCIES_TXT,
+
     SUPPORTED_CURRENCIES_ALL_TXT, SUPPORTED_CURRENCIES_ALL,COLORS_FOR_CURR
 } from "./config";
 import {disableButton} from "./disableForms";
@@ -38,13 +38,11 @@ export function runAtStartModalWindow() {
     };
 
     addOptionsToModalWindow();
-    console.log("oute at start model")
 }
 
 
 export function addNewCurrency(curr) {
-    console.log("in new curr")
-    if (HIDDEN_CURRENCIES.length !== 0) {
+    if (window.HIDDEN_CURRENCIES.length !== 0) {
 
         addColorToSupportedColors();
         addInputCurrencyForm(curr);
@@ -52,20 +50,20 @@ export function addNewCurrency(curr) {
         addPercentageForm(curr);
         addOptionToSelectCurrency(curr);
 
-        SUPPORTED_CURRENCIES.push(curr);
-        SUPPORTED_CURRENCIES_TXT.push(SUPPORTED_CURRENCIES_ALL_TXT[SUPPORTED_CURRENCIES_ALL.indexOf(curr)]);
+        window.SUPPORTED_CURRENCIES.push(curr);
+        window.SUPPORTED_CURRENCIES_TXT.push(SUPPORTED_CURRENCIES_ALL_TXT[SUPPORTED_CURRENCIES_ALL.indexOf(curr)]);
 
-        HIDDEN_CURRENCIES = HIDDEN_CURRENCIES.filter(function (item) {
+        window.HIDDEN_CURRENCIES = window.HIDDEN_CURRENCIES.filter(function (item) {
             return item !== curr
         });
 
-        HIDDEN_CURRENCIES_TXT = HIDDEN_CURRENCIES_TXT.filter(function (item) {
+        window.HIDDEN_CURRENCIES_TXT = window.HIDDEN_CURRENCIES_TXT.filter(function (item) {
             return item !== SUPPORTED_CURRENCIES_ALL_TXT[SUPPORTED_CURRENCIES_ALL.indexOf(curr)]
         });
 
         updateStatus();
     }
-    if (HIDDEN_CURRENCIES.length === 0) {
+    if (window.HIDDEN_CURRENCIES.length === 0) {
         disableButton(1)
     }
 }

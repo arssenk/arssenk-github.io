@@ -1,9 +1,10 @@
 import {currentDate, lastCurrencies} from "./index";
-import {COLORS_FOR_CURR, SUPPORTED_CURRENCIES} from "./config";
+import {COLORS_FOR_CURR} from "./config";
 import {renderBarChart} from "./graphBar";
 import * as d3 from "d3";
 import {convertToChosenForGraph} from "./converters";
 import {isCurrentYear} from "./helperFuncTmp";
+import {getChosenCurrency} from "./getters";
 
 
 export function renderLineChart() {
@@ -77,7 +78,7 @@ export function renderLineChart() {
         });
 
     let currencies = SUPPORTED_CURRENCIES.filter(item => {
-        return item !== window.choosenBoxValue && SUPPORTED_CURRENCIES.includes(item)
+        return item !== getChosenCurrency() && SUPPORTED_CURRENCIES.includes(item)
     }).map(function (currentCurrencyToAssign) {
         return {
             currentCurrency: currentCurrencyToAssign,
@@ -85,14 +86,14 @@ export function renderLineChart() {
                 return {
                     date: timeParser(d.date),
                     currency: convertToChosenForGraph(d,
-                        currentCurrencyToAssign, window.choosenBoxValue)
+                        currentCurrencyToAssign, getChosenCurrency())
                 };
             })
         };
     });
 
     let currenciesStatic = SUPPORTED_CURRENCIES.filter(item => {
-        return item !== window.choosenBoxValue && SUPPORTED_CURRENCIES.includes(item)
+        return item !== getChosenCurrency() && SUPPORTED_CURRENCIES.includes(item)
     }).map(function (currentCurrencyToAssign) {
         return {
             currentCurrency: currentCurrencyToAssign,
@@ -100,14 +101,14 @@ export function renderLineChart() {
                 return {
                     date: timeParser(d.date),
                     currency: convertToChosenForGraph(d,
-                        currentCurrencyToAssign, window.choosenBoxValue)
+                        currentCurrencyToAssign, getChosenCurrency())
                 };
             })
         };
     });
 
     let currenciesMoving = SUPPORTED_CURRENCIES.filter(item => {
-        return item !== window.choosenBoxValue && SUPPORTED_CURRENCIES.includes(item)
+        return item !== getChosenCurrency() && SUPPORTED_CURRENCIES.includes(item)
     }).map(function (currentCurrencyToAssign) {
         return {
             currentCurrency: currentCurrencyToAssign,
@@ -115,7 +116,7 @@ export function renderLineChart() {
                 return {
                     date: timeParser(d.date),
                     currency: convertToChosenForGraph(d,
-                        currentCurrencyToAssign, window.choosenBoxValue),
+                        currentCurrencyToAssign, getChosenCurrency()),
                     currencyName: currentCurrencyToAssign
                 };
             })
@@ -222,7 +223,7 @@ export function renderLineChart() {
         })
         .style("stroke", function (d) {
             SUPPORTED_CURRENCIES.filter(item => {
-                return item !== window.choosenBoxValue && SUPPORTED_CURRENCIES.includes(item)
+                return item !== getChosenCurrency() && SUPPORTED_CURRENCIES.includes(item)
             });
             if (SUPPORTED_CURRENCIES.includes(d.currentCurrency)) {
                 return COLORS_FOR_CURR[SUPPORTED_CURRENCIES.indexOf(d.currentCurrency)]
@@ -240,7 +241,7 @@ export function renderLineChart() {
             .attr("class", "line-chart__moving-lines")
             .attr("fill", "none")
             .style("stroke", function () {
-                if (SUPPORTED_CURRENCIES.indexOf(window.choosenBoxValue) <= i) {
+                if (SUPPORTED_CURRENCIES.indexOf(getChosenCurrency()) <= i) {
                     return COLORS_FOR_CURR[i + 1]
                 }
                 else {
@@ -265,7 +266,7 @@ export function renderLineChart() {
             })
             .style('cursor', 'ns-resize')
             .style('fill', function () {
-                if (SUPPORTED_CURRENCIES.indexOf(window.choosenBoxValue) <= i) {
+                if (SUPPORTED_CURRENCIES.indexOf(getChosenCurrency()) <= i) {
                     return COLORS_FOR_CURR[i + 1]
                 }
                 else {

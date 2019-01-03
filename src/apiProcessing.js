@@ -1,6 +1,7 @@
-import {SUPPORTED_CURRENCIES, SUPPORTED_CURRENCIES_ALL} from "./config";
+import { SUPPORTED_CURRENCIES_ALL} from "./config";
 import {convertToYYMMDDFormat} from "./converters";
 import {isCurrentYear} from "./helperFuncTmp";
+import {getChosenCurrency} from "./getters";
 
 //Generate api requests for year back
 export function generateYearBack(currDate, url, userKey) {
@@ -60,7 +61,7 @@ export function processDataApi(data) {
 //Setting getCurrencyData new currency base
 export function rebaseDate(data) {
     for (let i = 0; i < data.length; i++) {
-        let tmpBaseValue = data[i][window.choosenBoxValue];
+        let tmpBaseValue = data[i][getChosenCurrency()];
         for (let currencyItemIndex = 0; currencyItemIndex < SUPPORTED_CURRENCIES_ALL.length; currencyItemIndex++) {
             data[i][SUPPORTED_CURRENCIES_ALL[currencyItemIndex]] = data[i][SUPPORTED_CURRENCIES_ALL[currencyItemIndex]] / tmpBaseValue
         }
@@ -104,7 +105,7 @@ export function addPredictionPoints(currencyHistory, currentDate, lastCurrencies
     for (let dataIndex = 0; dataIndex <= 3; dataIndex++) {
         tmpDataItem = Object.assign({}, lastCurrencies);
         tmpDataItem.date = datesToAssign[dataIndex];
-        let currCurrencies = SUPPORTED_CURRENCIES.filter(item => item !== choosenBoxValue);
+        let currCurrencies = SUPPORTED_CURRENCIES.filter(item => item !== getChosenCurrency());
 
         for (let currencyIndex = 0; currencyIndex < currCurrencies.length; currencyIndex++) {
             tmpDataItem[currCurrencies[currencyIndex]] -= tmpDataItem[currCurrencies[currencyIndex]]

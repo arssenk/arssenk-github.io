@@ -1,4 +1,4 @@
-import {SUPPORTED_CURRENCIES} from "./config";
+// import {SUPPORTED_CURRENCIES} from "./config";
 
 
 export function getInputValues() {
@@ -39,4 +39,8 @@ export function getCurrencyObjectByDate(dateItem) {
             return window.currencyHistory[i];
         }
     }
+}
+export function getChosenCurrency(){
+    let chooseBox = document.getElementById("currency-choose-box-id");
+    return chooseBox.options[chooseBox.selectedIndex].value
 }

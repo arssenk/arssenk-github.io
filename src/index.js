@@ -5,6 +5,7 @@ import {addInputForms, addUpdateFunctionChooseBox, updateStatus} from "./helperF
 import {addPredictionPoints} from "./apiProcessing";
 import {disableForms} from "./disableForms";
 import {getCurrencyData} from "./apiCall";
+import {runAtStartModalWindow} from "./currency-modal-window";
 
 
 export let totalConverted = 0;
@@ -17,9 +18,9 @@ export let lastCurrencies = [];
 
 addInputForms();
 
-// TODO window,choset to getter
-let chooseBox = document.getElementById("currency-choose-box-id");
-window.choosenBoxValue = chooseBox.options[chooseBox.selectedIndex].value;
+// // TODO window,choset to getter
+// let chooseBox = document.getElementById("currency-choose-box-id");
+// window.choosenBoxValue = chooseBox.options[chooseBox.selectedIndex].value;
 
 let currencyData = getCurrencyData();
 
@@ -34,4 +35,4 @@ currencyData.then(resp => {
     updateStatus();
 });
 
-// runAtStartModalWindow();
+runAtStartModalWindow();

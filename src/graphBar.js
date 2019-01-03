@@ -1,7 +1,7 @@
-import {COLORS_FOR_CURR, colorsForPercentage, SUPPORTED_CURRENCIES, SUPPORTED_CURRENCIES_TXT} from "./config";
+import {COLORS_FOR_CURR, colorsForPercentage} from "./config";
 import {currentDate} from "./index";
 import * as d3 from "d3";
-import {getInputValues, getPercentageValues} from "./getters";
+import {getChosenCurrency, getInputValues, getPercentageValues} from "./getters";
 import {convertComplexPercentage, convertToChosenCurrencyWithDate} from "./converters";
 import {isCurrentYear} from "./helperFuncTmp";
 
@@ -52,7 +52,7 @@ export function renderBarChart(data_1) {
             //Convert to chosen currency
             dataFourMonth[i][SUPPORTED_CURRENCIES[currencyIndex]] =
                 +convertToChosenCurrencyWithDate(valueCurrencyArray[currencyIndex],
-                    SUPPORTED_CURRENCIES[currencyIndex], window.choosenBoxValue, dataFourMonth[i].date);
+                    SUPPORTED_CURRENCIES[currencyIndex], getChosenCurrency(), dataFourMonth[i].date);
 
             totalValue += dataFourMonth[i][SUPPORTED_CURRENCIES[currencyIndex]];
 
@@ -66,7 +66,7 @@ export function renderBarChart(data_1) {
                 //Convert to chosen currency
                 dataFourMonth[i][SUPPORTED_CURRENCIES[currencyIndex] + "_percentage"] =
                     +convertToChosenCurrencyWithDate(dataFourMonth[i][SUPPORTED_CURRENCIES[currencyIndex] + "_percentage"],
-                        SUPPORTED_CURRENCIES[currencyIndex], window.choosenBoxValue, dataFourMonth[i].date);
+                        SUPPORTED_CURRENCIES[currencyIndex], getChosenCurrency(), dataFourMonth[i].date);
 
                 totalValue += dataFourMonth[i][SUPPORTED_CURRENCIES[currencyIndex] + "_percentage"]
             }
@@ -143,7 +143,7 @@ export function renderBarChart(data_1) {
                     return tickValue
                 }
                 else {
-                    return tickValue + " " + SUPPORTED_CURRENCIES_TXT[SUPPORTED_CURRENCIES.indexOf(window.choosenBoxValue)]
+                    return tickValue + " " + SUPPORTED_CURRENCIES_TXT[SUPPORTED_CURRENCIES.indexOf(getChosenCurrency())]
                 }
             }));
 
@@ -161,10 +161,10 @@ export function renderBarChart(data_1) {
 
 function updateTotalValuesGraph2(val1, val2) {
     document.getElementById("graph-2-total-" + 1).value =
-        val1 + " " + SUPPORTED_CURRENCIES_TXT[SUPPORTED_CURRENCIES.indexOf(window.choosenBoxValue)];
+        val1 + " " + SUPPORTED_CURRENCIES_TXT[SUPPORTED_CURRENCIES.indexOf(getChosenCurrency())];
 
     document.getElementById("graph-2-total-" + 2).value =
-        val2 + " " + SUPPORTED_CURRENCIES_TXT[SUPPORTED_CURRENCIES.indexOf(window.choosenBoxValue)];
+        val2 + " " + SUPPORTED_CURRENCIES_TXT[SUPPORTED_CURRENCIES.indexOf(getChosenCurrency())];
 }
 
 function createDeepCopy(o) {

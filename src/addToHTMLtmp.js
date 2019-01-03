@@ -1,10 +1,9 @@
-import {totalConverted} from "./index";
 import {inputHandler, percentageInputHandler, updateStatus} from "./helperFuncTmp";
 import {
     DEFAULT_CURRENCIES_PERCENTAGE,
-    DEFAULT_CURRENCIES_VALUES, HIDDEN_CURRENCIES, HIDDEN_CURRENCIES_TXT,
+    DEFAULT_CURRENCIES_VALUES,
     SUPPORTED_CURRENCIES_ALL,
-    SUPPORTED_CURRENCIES_ALL_TXT, SUPPORTED_CURRENCIES, SUPPORTED_CURRENCIES_TXT, COLORS_FOR_CURR
+    SUPPORTED_CURRENCIES_ALL_TXT, COLORS_FOR_CURR
 } from "./config";
 import {addNewCurrency} from "./currency-modal-window";
 
@@ -103,15 +102,15 @@ export function addOutputCurrencyForm(curr) {
 
 export function addOptionsToModalWindow() {
     let placeToAdd = document.getElementsByClassName("modal_container")[0];
-    for (let currCurrencyIndex = 0; currCurrencyIndex < HIDDEN_CURRENCIES.length; currCurrencyIndex++) {
+    for (let currCurrencyIndex = 0; currCurrencyIndex < window.HIDDEN_CURRENCIES.length; currCurrencyIndex++) {
         let currencyAddButton = document.createElement("BUTTON");
         currencyAddButton.className = "modal__currency-button";
         let spanTagInButton = document.createElement("SPAN");
-        let spanValue = document.createTextNode(HIDDEN_CURRENCIES_TXT[currCurrencyIndex]);
+        let spanValue = document.createTextNode(window.HIDDEN_CURRENCIES_TXT[currCurrencyIndex]);
         spanTagInButton.appendChild(spanValue);
         currencyAddButton.appendChild(spanValue);
         currencyAddButton.onclick = function () {
-            addNewCurrency(HIDDEN_CURRENCIES[HIDDEN_CURRENCIES_TXT.indexOf(this.childNodes[0].data)]);
+            addNewCurrency(window.HIDDEN_CURRENCIES[window.HIDDEN_CURRENCIES_TXT.indexOf(this.childNodes[0].data)]);
             this.remove()
         };
 

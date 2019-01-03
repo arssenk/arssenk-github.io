@@ -1,5 +1,5 @@
 import {rebaseDate} from "./apiProcessing";
-import {COLORS_FOR_CURR, SUPPORTED_CURRENCIES, SUPPORTED_CURRENCIES_TXT} from "./config";
+import {COLORS_FOR_CURR} from "./config";
 import * as d3 from "d3";
 import {renderBarChart} from "./graphBar";
 import {
@@ -11,7 +11,7 @@ import {
     addPercentageForm
 } from "./addToHTMLtmp";
 import {renderLineChart} from "./lineChart";
-import {getInputValues} from "./getters";
+import {getChosenCurrency, getInputValues} from "./getters";
 import {convertToChosenCurrency} from "./converters";
 
 
@@ -30,23 +30,20 @@ export function addInputForms() {
 }
 // Updates all forms, graphs, button and checkbox
 export function updateStatus() {
-    updateDropDownValue();
 
     rebaseDate(window.currencyHistory);
 
-    updateCurrencyInTitle(window.choosenBoxValue);
+    updateCurrencyInTitle();
 
     inputHandler();
 
     percentageInputHandler();
-
 
     addBackgroundColorToInputForm();
 
     renderLineChart();
 
     renderBarChart(window.currencyHistory);
-
 }
 
 export function addUpdateFunctionChooseBox() {
@@ -56,21 +53,20 @@ export function addUpdateFunctionChooseBox() {
     };
 }
 
-
-function updateDropDownValue() {
-    let chooseBox = document.getElementById("currency-choose-box-id");
-    window.choosenBoxValue = chooseBox.options[chooseBox.selectedIndex].value;
-    return chooseBox.options[chooseBox.selectedIndex].value;
-}
+//
+// function updateDropDownValue() {
+//     let chooseBox = document.getElementById("currency-choose-box-id");
+//     window.choosenBoxValue = chooseBox.options[chooseBox.selectedIndex].value;
+//     return chooseBox.options[chooseBox.selectedIndex].value;
+// }
 
 function updateCurrencyInTitle() {
     document.getElementById('output-current-currency').innerHTML = "В моїй валюті, "
-        + SUPPORTED_CURRENCIES_TXT[SUPPORTED_CURRENCIES.indexOf(window.choosenBoxValue)];
+        + SUPPORTED_CURRENCIES_TXT[SUPPORTED_CURRENCIES.indexOf(getChosenCurrency())];
 }
 
 function parseCurrencyInput() {
     for (let i = 1; i < SUPPORTED_CURRENCIES.length + 1; i++) {
-
         // Parse spaces
         document.getElementById("currency_" + i).value =
             document.getElementById("currency_" + i).value.split(" ").join("");
@@ -106,7 +102,7 @@ function writeToOutputForms() {
     let inputCurrencyValues = getInputValues();
     for (let i = 1; i < SUPPORTED_CURRENCIES.length + 1; i++) {
         let valueToWrite = +convertToChosenCurrency(inputCurrencyValues[i - 1],
-            SUPPORTED_CURRENCIES[i - 1], window.choosenBoxValue);
+            SUPPORTED_CURRENCIES[i - 1], getChosenCurrency());
 
         if (valueToWrite > 1000) {
             valueToWrite = Math.round(valueToWrite)
