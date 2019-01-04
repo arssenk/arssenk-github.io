@@ -25,7 +25,6 @@ export function renderLineChart() {
             dataMoving.push(dataToSplit[i])
         }
     }
-
     //Removing old graph
     d3.select(".line-chart__svg").remove();
 

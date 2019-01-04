@@ -2,9 +2,9 @@
  * Created by arsen on 29.12.18.
  */
 import {addInputForms, addUpdateFunctionChooseBox, updateStatus} from "./helperFuncTmp";
+import {getCurrencyDataAlt} from "./apiCall";
 import {addPredictionPoints} from "./apiProcessing";
 import {disableForms} from "./disableForms";
-import {getCurrencyData} from "./apiCall";
 import {runAtStartModalWindow} from "./currency-modal-window";
 
 
@@ -16,7 +16,7 @@ export let LAST_CURRENCIES = [];
 
 addInputForms();
 
-let currencyData = getCurrencyData();
+let currencyData = getCurrencyDataAlt();
 
 currencyData.then(resp => {
     LAST_CURRENCIES = resp[resp.length - 1];

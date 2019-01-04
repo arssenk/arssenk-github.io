@@ -43,13 +43,13 @@ export function generateYearBack(currDate, url, userKey) {
 //Creates objects with supported currencies
 export function processDataApi(data) {
     let neededCurrencies = SUPPORTED_CURRENCIES_ALL;
-    let tmp = [];
+    let tmp = Object();
     for (let currentCurrency = 0; currentCurrency < neededCurrencies.length; currentCurrency++) {
-        tmp[neededCurrencies[currentCurrency]] = data["rates"][neededCurrencies[currentCurrency]];
+        tmp[neededCurrencies[currentCurrency]] = data[neededCurrencies[currentCurrency]];
 
         //If added currency is not in api call
-        if (data["rates"][neededCurrencies[currentCurrency]] === undefined) {
-            alert("Your added currency is not supported");
+        if (data[neededCurrencies[currentCurrency]] === undefined) {
+            alert("Your added currency " + neededCurrencies[currentCurrency] + " is not supported");
             throw "Your added currency is not supported";
         }
     }
