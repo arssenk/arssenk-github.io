@@ -60,13 +60,12 @@ function updateCurrencyInTitle() {
 
 function parseCurrencyInput() {
     for (let i = 1; i < SUPPORTED_CURRENCIES.length + 1; i++) {
-        // Parse spaces
-        document.getElementById("currency_" + i).value =
-            document.getElementById("currency_" + i).value.split(" ").join("");
+        // Parse spaces and leading zeroes
+        document.getElementById("currency_" + i).value = document.getElementById("currency_" + i).value.replace(/^0+|\s/g, '')
 
 
         //Parse empty string
-        if (document.getElementById("currency_" + i).value === "" ||document.getElementById("currency_" + i).value[0] ==="0" ) {
+        if (document.getElementById("currency_" + i).value === "") {
             document.getElementById("currency_" + i).value = 0;
         }
 
@@ -80,7 +79,13 @@ function parseCurrencyInput() {
 }
 
 function parsePercentageInput() {
+
     for (let i = 1; i < SUPPORTED_CURRENCIES.length + 1; i++) {
+        document.getElementById("input_percentage_" + i).value = document.getElementById("input_percentage_" + i).value.replace(/^0+|\s/g, '');
+        //Parse empty string
+        if (document.getElementById("input_percentage_" + i).value === "") {
+            document.getElementById("input_percentage_" + i).value = 0;
+        }
         if (!isNumberForPercentage(document.getElementById("input_percentage_" + i).value)) {
             alert("Percentage " + i + " needs to be in range 0-100");
             document.getElementById("input_percentage_" + i).value = 0;

@@ -78,7 +78,7 @@ export function addPercentageForm(curr) {
 
     let inputForm = document.createElement("INPUT");
     inputForm.className = "convert-table__input-percentage-form";
-    inputForm.id = "input_percentage_" + (SUPPORTED_CURRENCIES_ALL.indexOf(curr) + 1).toString();
+    inputForm.id = "input_percentage_" + (document.getElementsByClassName("convert-table__input-percentage-form").length + 1).toString();
     inputForm.type = "text";
     inputForm.setAttribute("value", DEFAULT_CURRENCIES_PERCENTAGE[SUPPORTED_CURRENCIES_ALL.indexOf(curr)]);
 
@@ -91,10 +91,10 @@ export function addPercentageForm(curr) {
 
 
 export function addOutputCurrencyForm(curr) {
-
     let outputForm = document.createElement("OUTPUT");
     outputForm.className = "convert-table__output-exchange";
-    outputForm.id = "currency_converted_" + (SUPPORTED_CURRENCIES_ALL.indexOf(curr) + 1).toString();
+    outputForm.id = "currency_converted_" +
+        (document.getElementsByClassName("convert-table__output-exchange").length + 1).toString();
 
     document.getElementsByClassName("convert-table__converted-currency")[0].append(outputForm);
 

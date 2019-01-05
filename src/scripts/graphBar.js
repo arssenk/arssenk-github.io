@@ -6,11 +6,11 @@ import {convertComplexPercentage, convertToChosenCurrencyWithDate} from "./conve
 import {isCurrentYear} from "./helperFuncTmp";
 
 export function renderBarChart(data_1) {
+
     let data = createDeepCopy(data_1);
     let dataFourMonth = [];
     // quarterMonthCopy = quarterMonth.slice();
     let namesXAxisBar = ["сегодня", "через год"];
-
 
     // Current year chosen month
     for (let i = 0; i < data.length; i++) {
@@ -18,6 +18,7 @@ export function renderBarChart(data_1) {
             dataFourMonth.push(data[i])
         }
     }
+
     d3.select(".bar-chart__svg").remove();
     d3.select(".bar-chart").append("svg").attr("class", "bar-chart__svg")
         .attr("width", 300).attr("height", 225);
@@ -41,7 +42,9 @@ export function renderBarChart(data_1) {
     let colors = d3.scaleOrdinal(d3.schemeCategory20);
 
     let valueCurrencyArray = getInputValues();
+
     let valuePercentageArray = getPercentageValues();
+
     //update values
     for (let i = 0; i < dataFourMonth.length; i++) {
 
@@ -55,7 +58,6 @@ export function renderBarChart(data_1) {
                     SUPPORTED_CURRENCIES[currencyIndex], getChosenCurrency(), dataFourMonth[i].date);
 
             totalValue += dataFourMonth[i][SUPPORTED_CURRENCIES[currencyIndex]];
-
             if (document.getElementById("percentage_checkbox").checked) {
 
                 //Calculate complex percentage
@@ -160,11 +162,13 @@ export function renderBarChart(data_1) {
 }
 
 function updateTotalValuesGraph2(val1, val2) {
+
     document.getElementById("graph-2-total-" + 1).value =
         val1 + " " + SUPPORTED_CURRENCIES_TXT[SUPPORTED_CURRENCIES.indexOf(getChosenCurrency())];
 
     document.getElementById("graph-2-total-" + 2).value =
         val2 + " " + SUPPORTED_CURRENCIES_TXT[SUPPORTED_CURRENCIES.indexOf(getChosenCurrency())];
+
 }
 
 function createDeepCopy(o) {

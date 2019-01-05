@@ -9,7 +9,6 @@ import {
 } from "./config";
 import {disableButton} from "./disableForms";
 import {updateStatus} from "./helperFuncTmp";
-import {totalConverted} from "./index";
 
 export function runAtStartModalWindow() {
     let modal = document.getElementById('currency-modal');
@@ -43,7 +42,6 @@ export function runAtStartModalWindow() {
 
 export function addNewCurrency(curr) {
     if (window.HIDDEN_CURRENCIES.length !== 0) {
-
         addColorToSupportedColors();
         addInputCurrencyForm(curr);
         addOutputCurrencyForm(curr);
